@@ -32,26 +32,26 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
 
 数据湖分析平台支持各类异构数据源，包括传统关系型数据库（Mysql等）、流式数据及日志数据（Kafka、TubeMQ、Pulsar等）、
 传统文件类型的数据源，基于流式计算平台Oceanus实现实时数据入湖任务，通过US实现存量数据入湖任务，实现一站式入
-湖任务管理及分析。功能架构图如图4.1所示：
+湖任务管理及分析。功能架构图如图\ref{fig:功能架构图}所示：
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{功能架构图.png}
   \caption{功能架构图}
-  \label{fig:badge}
+  \label{fig:功能架构图}
 \end{figure}
 
 \subsection{系统架构设计}
 
-数据湖分析系统的主要系统架构如图4.2所示。用户通过浏览器的前端页面访问服务器，服务器根据收到的请求进行业务层操作，
+数据湖分析系统的主要系统架构如图\ref{fig:系统架构图}所示。用户通过浏览器的前端页面访问服务器，服务器根据收到的请求进行业务层操作，
 并对数据库持久层进行更新。该系统共有数据源管理、元数据管理管理、数据入湖管理、数据探索、自动优化五个模块。
 系统的数据持久能力主要由Mysql作为系统的数据库提供。
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{系统架构图.png}
   \caption{系统架构图}
-  \label{fig:badge}
+  \label{fig:系统架构图}
 \end{figure}
 
 \section{系统功能模块设计}
@@ -61,16 +61,26 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
 
 \subsection{数据源管理模块}
 
-数据源是入湖任务必须设置的，是Iceberg入湖的源头，从数据源分类上来看，
-数据湖分析系统支持关系型数据库源（mysql）以及消息队列数据源（tube、kafka、pulsar），
-该模块支持数据源创建、查看、编辑、删除功能，各数据源需要的信息字段如下：
+数据源是入湖任务必须设置的，是Iceberg入湖的源头，该模块支持数据源创建、查看、编辑、删除功能。
+在系统上创建数据源，需要填好所需要的信息，然后会做一个连接测试，最后才会将该数据源持久化到mysql中。
+创建数据源的时序图如图\ref{fig:数据源创建时序图}所示：
 
-（1）创建mysql数据源需要的信息字段如表4.1所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{数据源创建时序图.png}
+  \caption{数据源创建时序图}
+  \label{fig:数据源创建时序图}
+\end{figure}
 
-\begin{table}[h]
+从数据源分类上来看，数据湖分析系统支持关系型数据库源
+（mysql）以及消息队列数据源（tube、kafka、pulsar），各数据源需要的信息字段如下：
+
+（1）创建mysql数据源需要的信息字段如表\ref{tab:mysql数据源需要的信息字段}所示：
+
+\begin{table}[H]
   \centering
   \caption{mysql数据源需要的信息字段}
-  \label{tab:exampletable}
+  \label{tab:mysql数据源需要的信息字段}
   \begin{tabular}{clcl}
     \toprule
     序号  & 字段名     & 是否空值   & 说明    \\
@@ -86,12 +96,12 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
   \end{tabular}
 \end{table}
 
-（2）创建tube数据源需要的信息字段如表4.2所示：
+（2）创建tube数据源需要的信息字段如表\ref{tab:tube数据源需要的信息字段}所示：
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{tube数据源需要的信息字段}
-  \label{tab:exampletable}
+  \label{tab:tube数据源需要的信息字段}
   \begin{tabular}{clcl}
     \toprule
     序号  & 字段名     & 是否空值   & 说明                                      \\
@@ -104,12 +114,12 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
   \end{tabular}
 \end{table}
 
-（3）创建kafka数据源需要的信息字段如表4.3所示：
+（3）创建kafka数据源需要的信息字段如表\ref{tab:kafka数据源需要的信息字段}所示：
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{kafka数据源需要的信息字段}
-  \label{tab:exampletable}
+  \label{tab:kafka数据源需要的信息字段}
   \begin{tabular}{clcl}
     \toprule
     序号  & 字段名     & 是否空值   & 说明                                      \\
@@ -122,12 +132,12 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
   \end{tabular}
 \end{table}
 
-（4）创建Pulsar数据源需要的信息字段如表4.4所示：
+（4）创建Pulsar数据源需要的信息字段如表\ref{tab:Pulsar数据源需要的信息字段}所示：
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{Pulsar数据源需要的信息字段}
-  \label{tab:exampletable}
+  \label{tab:Pulsar数据源需要的信息字段}
   \begin{tabular}{clcl}
     \toprule
     序号  & 字段名     & 是否空值   & 说明                                      \\
@@ -145,38 +155,40 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
 元数据模块是用来管理iceberg表元数据的，包含四个主要的功能，分别是表的创建、表的编辑、表的查看、数据自动优化。
 因为自动优化会修改元数据，所以自动优化是属于元数据管理的，在后面的小节会进行详细介绍。
 
-其中表的创建需要和hive metastore、mysql进行交互，一个createTable的request建立后，
-首先会判断metastore中是否已存在表，若不存在，则会判断MySQL中是否存在对应的DB和table，
+其中表的创建需要和安全中心、hive metastore、mysql进行交互，一个createTable的request建立后，
+首先到安全中心判断用户是否有该数据库的create权限，有才能进行下一步，
+接着会判断metastore中是否已存在表，若不存在，则会判断MySQL中是否存在对应的DB和table，
 这里MySQL中的DB和table实质上是一个映射，是用来方便在系统页面展示表元数据的，若MySQL中不存在，
 则创建对应的DB和table，接着会在metastore中创建实际的iceberg表元数据；表的查看直接去
 MySQL中查看即可；表的编辑如果涉及到字段的增加及删除操作，则会更新metastore中对应的
-表元数据。创建Iceberg表的时序图如图4.3所示。
+表元数据。创建Iceberg表的时序图如图\ref{fig:创建Iceberg表时序图}所示。
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{DLA创建Iceberg表时序图.png}
-  \caption{DLA创建Iceberg表时序图}
-  \label{fig:badge}
+  \includegraphics[width=0.9\textwidth]{DLA创建Iceberg表时序图.png}
+  \caption{创建Iceberg表时序图}
+  \label{fig:创建Iceberg表时序图}
 \end{figure}
 
 \subsection{数据入湖模块}
 
-数据入湖功能模块是DLA系统核心流程功能，目的是用户通过该功能将源数据表流程化入湖
+数据入湖功能模块是数据湖分析系统核心流程功能，目的是用户通过该功能将源数据表流程化入湖
 和查看已申请入湖任务执行情况。入湖任务分为三类，分别为实时数据入湖、存量数据入湖
 和关系型数据入湖，三类入湖任务的创建都需要填写基础信息、源表、目标表、参数及资源，
 若目标表在任务创建的时候还没有创建，则会自动的根据填写的字段信息生产对应的目标表，
-即在对应的数据库中生成iceberg表。该模块的时序图如图4.5所示。
+即在对应的数据库中生成iceberg表，因为需要访问元数据，所以也会在安全中心进行权限认证。
+该模块的时序图如图\ref{fig:入湖任务创建时序图}所示。
 
 入湖任务都会生成对应的jar包，若为实时数据入湖，则会在公司内部的实时流计算平台
 Oceanus上创建对应的jar任务，底层使用的引擎是flink；若为存量数据入湖或者关系
 型数据入湖，则会在定时任务执行平台US上创建jar任务，底层使用的引擎是spark，
 并可在系统页面上设置任务执行的时间间隔和起始时间。
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{入湖任务创建时序图.png}
+  \includegraphics[width=0.9\textwidth]{入湖任务创建时序图.png}
   \caption{入湖任务创建时序图}
-  \label{fig:badge}
+  \label{fig:入湖任务创建时序图}
 \end{figure}
 
 \subsection{数据探索模块}
@@ -185,19 +197,18 @@ Oceanus上创建对应的jar任务，底层使用的引擎是flink；若为存�
 目前主要依赖内部统一查询平台实现数据探索功能，在该平台上，用户可以编写sql
 设置执行引擎，presto或者spark。其中presto查询速度快，但是功能少，
 只支持查询功能；spark虽然查询速度慢，但支持的语句功能比较多，支持创建表、
-删除表、更新表、数据写入、数据删除、更新分区、表维护等语句。在查询平台上的数据探索时序图如图4.6所示。
+删除表、更新表、数据写入、数据删除、更新分区、表维护等语句。在查询平台上的数据探索时序图如图\ref{fig:数据探索时序图}所示。
 
-除了统一查询平台可以进行数据探索外，我们还提供了Zeppelin可以进行数据探索，
-Zeppelin是一个基于Web的notebook，提供交互数据分析和可视化。后台支持接
-入多种数据处理引擎，如spark，hive等。支持多种语言： Scala(Apache Spark)、
-Python(Apache Spark)、SparkSQL、 Hive、 Markdown、Shell等。开发者可以通过实现更多的解释器来为Zeppelin添加数据引擎。
-
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{数据探索时序图.png}
+  \includegraphics[width=0.7\textwidth]{数据探索时序图.png}
   \caption{数据探索时序图}
-  \label{fig:badge}
+  \label{fig:数据探索时序图}
 \end{figure}
+
+除了统一查询平台可以进行数据探索外，我们还提供了Zeppelin进行数据探索，Zeppelin是一个基于Web的notebook，
+可以进行数据探索和可视化。它可以接入多种数据处理引擎，如spark、hive等，并支持多种语言，
+如Scala、Python、SparkSQL、Hive、Markdown、Shell等。开发者还可以实现更多的解释器来添加数据引擎。
 
 \subsection{自动优化服务}
 
@@ -207,38 +218,34 @@ Iceberg是基于快照的表格式，当两次commit间隔的数据量较小的�
 为了让用户能更方便的使用iceberg表，优化总体基于iceberg表数据湖的成本和性能，
 这里提出数据智能运维的概念，通过平台提供的统一服务对iceberg表进行优化从而降低整体数据湖的成本和性能的优化。
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{自动优化总体流程图.png}
   \caption{自动优化总体运行流程图}
-  \label{fig:badge}
+  \label{fig:自动优化总体运行流程图}
 \end{figure}
 
-自动优化服务的总体运行流程图如图4.7所示，
-可以看到整个服务中的数据流。我们先从小文件合并服务来简单的介绍，
-比如说用户对Iceberg进行操作，我们在Iceberg接口这边已经为Iceberg实现了
-Iceberg的Metrics汇报到外接系统的功能，首先Metrics的Reporter会将Iceberg
-的一些建表、删除、更新或者任何Commit操作所产生的snapshot的
-summery汇报到iceberg的Metrics Event Handler那边，Metrics Event Handler
-接收到不同的事件之后会根据不同事件的类型将这些事件存储到MySQL。这里我们做了一个
-改造采用一个消息队列来保证事件的时效性，并且对消息队列里面的数据定期的保存在MySQL中。
-表的一些基础的记录信息比如表在合并前后的文件数量、
-表的文件数、操作类型等这些表所能提供的一些metrics信息，当数据通过消息队列
-发送到中间阶段的时候，中间阶段内部有个规则管理器会去配置大量的规则，比如一些用户希望表在每产生100个10M文
-件的时候就进行一次合并。这些规则的接口其实是开放给用户去配置的，这些接口配置之后会将配置传给下游的任务调度
-器，任务读取器会读取上游发送过来的一些规则，以决定现在要根据这些规则去起一个什么样的任务。图中我们可以看到
-下游会有很多不同的任务，比如JOB1、JOB2、JOB3，目前是采用离线的Spark任务去跑上游发送过来的信息。执
-行的频率有5分钟、10分钟、60分钟等，主要就是根据用户所配置的表。用户的表里面如果要保留过去100个文件，这个时候
-在监控里面看到用户会一直频繁地在提交，那么在单位时间内所产生的文件数量会非常非常的多，这个时候就需要更低的频
-率比如5分钟去对用户的表执行一次合并文件操作。有些用户比是10分钟或者20分钟才commit一次，这个时候可能只需要
-跑小时级别或者跑5个小时调度一次去做这个文件的处理，这边是针对不同用户的表的一些metrics的情况来决定应该将用
-户的表放给哪一个粒度的调度任务去执行。那么我们知道每个job可以看到很多用户的表，一个job可能会处理三四个表，
-每次处理完之后会将这三四个表的处理逻辑通过Metrics System消息队列再反馈给刚刚我们记录的MySQL，然后再通过
-Grafana或者一些监控的工具就可以看到整个任务的运行情况，包括合并之后表是什么状态这里都可
-以看得到。还有一个重要的点是每次合并文件任务执行的过程中花了多少时间，这样就可以通过Job Handler动
-态地调整每个Job所负责的表的数量，比方说一个job执行的表是1、2、3三个表，发现1表跟2表执行合并任务花了10
-秒钟就执行完了，3表执行了5分钟，因为整个任务是并发提交的，所以需要等到第三个表执行完之后这个任务才能够继续调
-度下一次。这个时候就可以在下次调度的时候把3表调度到其他的任务区，1表和2表就可以在一分钟之内不断地做文件数量的处理。
+自动优化服务的总体运行流程图如图\ref{fig:自动优化总体运行流程图}所示，可以看到整个服务中的数据流。
+我们先简单介绍小文件合并服务。当用户对Iceberg进行操作时，我们已经为Iceberg
+实现了汇报Metrics到外部系统的功能。Metrics的Reporter会将Iceberg的建表、
+删除、更新或Commit操作产生的snapshot的summary报告到Iceberg的Metrics事件
+处理程序。Metrics事件处理程序会根据不同事件的类型将这些事件存储到MySQL中。这里
+我们改进了这个过程，采用了消息队列来确保事件的时效性，并且定期将消息队列中的数据保存在MySQL中。
+表的一些基本的记录信息，如表在合并前后的文件数量、操作类型等Metrics信息。
+在数据通过消息队列发送到中间阶段时，规则管理器会根据用户配置的规则配置大量规则。
+例如，一些用户希望在每产生100个10M文件时对表进行一次合并。这些规则接口开放给
+用户配置，配置传递给下游任务调度器。任务读取器读取上游发送的规则，以决定根据这些规则启动什么样的任务。
+图中我们可以看到下游有许多不同的任务，如JOB1、JOB2、JOB3。为处理上游发送的信息，我们目前使用离线的Spark任务。
+任务执行频率根据用户配置的表而定，可以是5分钟、10分钟、60分钟等。如果用户表需要保留过去100个文件，
+而用户提交频率很高，可能在单位时间内产生大量文件，那么就需要以5分钟为单位执行一次合并文件操作。对于提交频率
+较低的用户，可以以小时级别或每5个小时执行一次文件处理调度任务，根据不同用户表的一些metrics情况决
+定将用户表放在哪个粒度的调度任务中执行。
+我们知道每个job可以处理多个用户的表，每次处理完后，将这些表的处理结果通过Metrics System消息队列
+反馈给MySQL记录。然后通过Grafana或其他监控工具可以查看任务的运行情况，包括合并后表的状态等。
+此外，还记录每次合并文件任务的执行时间，以便通过Job Handler动态地调整每个job所处理的表的数量。
+例如，如果一个job处理1、2、3三个表，发现1表和2表执行的合并任务只花费10秒钟，而3表花了5分钟，
+由于任务是并发提交的，因此必须等到第三个表执行完毕后，才能继续调度下一次任务。
+那么我们可以在下次调度时将3表调度到其他任务区，让1表和2表在一分钟内不断处理文件数量。
 
 \subsubsection{合并小文件}
 
@@ -251,42 +258,42 @@ Grafana或者一些监控的工具就可以看到整个任务的运行情况，�
 均方误差的数学含义是表示一个样本区间内样本值与目标值之间差异程度的一种度量，
 我们设定合并后大文件的目标大小为512MB，则这个样本区间就是512MB，如果MSE的值越大，
 表示当前样本区间内的文件相对于目标大小的差值也越大，因此我们可以设定一个阈值来决定合并的粒度，
-例如设置一个阈值T，当阈值T越大表示合并的区间内小文件的比例要越高才会被触发到合并。如图4.8所示。
-MSE通过公式4.1进行计算：
+例如设置一个阈值T，当阈值T越大表示合并的区间内小文件的比例要越高才会被触发到合并。如图\ref{fig:小文件合并触发示意图}所示。
+MSE通过公式\ref{eq:example1}进行计算：
 
 \begin{equation}
   MSE=\frac {\sum_{i=1}^{N}{(Target_i - Actual_i)^2}} {N}
-  \label{eq:example}
+  \label{eq:example1}
 \end{equation}
 
 其中N代表一个分区内的文件数，Target代表合并后的目标文件大小，Actual等于min(分区内实际的文件大小, Target）。
 
-当分区内文件状态需要更新的时候，通过公式4.2和公式4.3进行计算：
+当分区内文件状态需要更新的时候，通过公式\ref{eq:example2}和公式\ref{eq:example3}进行计算：
 
 \begin{equation}
   SE=\sum_{i=1}^{N}{(Target_i - Actual_i)^2}
-  \label{eq:example}
+  \label{eq:example2}
 \end{equation}
 
 其中M代表分区内的新的文件数。
 
 \begin{equation}
   MSEnew=\frac {MSEold*N+SE} {N+M}
-  \label{eq:example}
+  \label{eq:example3}
 \end{equation}
 
-阈值T的取值通过公式4.4进行计算：
+阈值T的取值通过公式\ref{eq:example4}进行计算：
 
 \begin{equation}
   T=(Target*a)^2 \qquad (0<a<1)
-  \label{eq:example}
+  \label{eq:example4}
 \end{equation}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{小文件合并触发示意图.png}
   \caption{小文件合并触发示意图}
-  \label{fig:badge}
+  \label{fig:小文件合并触发示意图}
 \end{figure}
 
 \subsubsection{历史快照清理}
@@ -295,13 +302,13 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
 所以对于流式写入，会产生大量的snapshot。
 对于历史快照的清理，我们需要配置两个参数，快照失效时间和快照保留数量，
 其中所配置的快照失效时间以小时为粒度，超过所设置的时间或者超过了快照保留的阈值
-快照将被删除。快照删除的触发条件如图4.13所示
+快照将被删除。快照删除的触发条件如图\ref{fig:历史快照删除触发条件}所示
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{历史快照删除触发条件.png}
   \caption{历史快照删除触发条件}
-  \label{fig:badge}
+  \label{fig:历史快照删除触发条件}
 \end{figure}
 
 \subsubsection{孤儿文件删除}
@@ -330,25 +337,25 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
 
 \section{系统数据库设计}
 
-在信息存储方面，DLA主要使用mysql进行信息存储，主要包括任务信息、任务详情信息、
+在信息存储方面，数据湖分析系统主要使用mysql进行信息存储，主要包括任务信息、任务详情信息、
 目标库信息、目标表信息、数据源信息、任务jar包信息，其中目标库和目标表在mysql
-中的信息只是一个映射，具体实际的表还是Iceberg表，其数据存储在HDFS集群上。数据库ER图如图4.13所示。
+中的信息只是一个映射，具体实际的表还是Iceberg表，其数据存储在HDFS集群上。数据库ER图如图\ref{fig:数据库ER图}所示。
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{数据库ER图.png}
   \caption{数据库ER图}
-  \label{fig:badge}
+  \label{fig:数据库ER图}
 \end{figure}
 
 系统中主要的数据库表格结构设计如下：
 
-（1）任务表（dlaTask）详细描述如表4.5所示。
+（1）任务表（dlaTask）详细描述如表\ref{tab:任务表}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{任务表}
-  \label{tab:exampletable}
+  \label{tab:任务表}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名         & 字段说明     & 类型           & 是否可为空   & 说明  \\
@@ -369,12 +376,12 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
   \end{tabular}
 \end{table}
 
-（2）任务详情表（dlaTaskDetail）详细描述如表4.6所示。
+（2）任务详情表（dlaTaskDetail）详细描述如表\ref{tab:任务详情表}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{任务详情表}
-  \label{tab:exampletable}
+  \label{tab:任务详情表}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名              & 字段说明     & 类型           & 是否可为空   & 说明  \\
@@ -392,12 +399,12 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
   \end{tabular}
 \end{table}
 
-（3）目标库（dlaDatabase）详细描述如表4.7所示。
+（3）目标库（dlaDatabase）详细描述如表\ref{tab:目标库}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{目标库}
-  \label{tab:exampletable}
+  \label{tab:目标库}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名              & 字段说明     & 类型           & 是否可为空   & 说明  \\
@@ -411,12 +418,12 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
   \end{tabular}
 \end{table}
 
-（4）目标表（dlaTable）详细描述如表4.8所示。
+（4）目标表（dlaTable）详细描述如表\ref{tab:目标表}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{目标表}
-  \label{tab:exampletable}
+  \label{tab:目标表}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名              & 字段说明     & 类型           & 是否可为空   & 说明  \\
@@ -438,12 +445,12 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
   \end{tabular}
 \end{table}
 
-（5）数据源表（dlaDatasource）详细描述如表4.9所示。
+（5）数据源表（dlaDatasource）详细描述如表\ref{tab:数据源表}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{数据源表}
-  \label{tab:exampletable}
+  \label{tab:数据源表}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名              & 字段说明           & 类型           & 是否可为空   & 说明  \\
@@ -461,12 +468,12 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
   \end{tabular}
 \end{table}
 
-（6）任务jar包管理表（dlaTaskJar）详细描述如表4.10所示。
+（6）任务jar包管理表（dlaTaskJar）详细描述如表\ref{tab:任务jar包管理表}所示。
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \caption{任务jar包管理表}
-  \label{tab:exampletable}
+  \label{tab:任务jar包管理表}
   \begin{tabular}{clllcl}
     \toprule
     序号  & 字段名              & 字段说明           & 类型           & 是否可为空   & 说明  \\

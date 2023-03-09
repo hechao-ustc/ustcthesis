@@ -1,37 +1,84 @@
 % !TeX root = ../main.tex
 
 \ustcsetup{
-  keywords  = {数据湖, Iceberg, 实时湖仓, 小文件合并},
-  keywords* = {dissertation, abstract, keywords},
+  keywords  = {数据湖, Iceberg, 实时湖仓, 自动优化},
+  keywords* = {Data Lake, Iceberg, Real-time Lakehouse, Auto Optimize},
 }
 
 \begin{abstract}
-  近年来随着大数据、机器学总习、5G等技术飞速发展，数据规模越来越大，数据量呈几何增长，数据来源和类型更加多元化。
-  同时随着企业对数据驱动业务需求的深入，也随着海量数据分析技术的成熟，数据仓库已是企业内部进行数据洞察的标准服务。
-  但是传统基于Hadoop技术的数据仓库从数据导入到数据分析每个环节都有较大的延迟，使得数据分析的时效性大大变低；
-  同时对于数据分析场景的拓展，传统单一的数仓架构也没法满足多变的数据分析需求。为此业界也在探索新一代更为通用的实时数仓/数据湖架构。
 
-  经过对企业大数据发展现状的深入调研，充分了解企业需求和业务挑战，同时结合前沿开源技术发展现状，设计
-  并实现了基于iceberg的数据湖分析（Data Lake Analytics，简称DLA)系统。首先对企业内部的多种数据源进行分析总结，然后
-  我们根据Apache Iceberg支持多种数据源、多种计算引擎、多种存储介质以及其它优秀特性，设计并实现了数据源管理、元数据管理、数据入湖、
-  数据探索四大模块，其中数据源是入湖任务的前提要求，通过注册相应数据源，可在创建入湖任务时选择对应的源表；元数据是描述iceberg表的，
-  iceberg表即入湖任务中的目标表；数据入湖是DLA系统的核心流程功能，目的是用户通过该功能将源数据表流程化入湖和查看已申请入湖
-  任务执行情况；数据探索模块基于spark和presto实现了数据的查询使用功能。其中在元数据管理中，我们提供了iceberg表的自动优化
-  功能，包括合并小文件、清理过期快照数据、删除孤儿文件、生命周期管理等，这项服务使得用户不再需要自己写程序来进行优化，降低了用户的运维成本，
-  使用户可以一键启动该服务，并会根据表的若干指标及历史执行情况判断所需资源，并配有告警机制，及时通知专业运维处理。
+近年来随着大数据、机器学习和5G等技术的飞速发展，数据规模不断增大，数据来源和类型也变得更加多元化。
+同时随着企业对数据驱动业务需求的不断深入，也随着海量数据分析技术的成熟，数据仓库已成为企业内部数据洞察的标准服务。然而，
+传统基于Hadoop技术的数据仓库从数据导入到数据分析每个环节都有较大的延迟，使得数据分析的时效性大大降低。
+同时，对于数据分析场景的拓展，传统单一的数仓架构也无法满足多变的数据分析需求。
+为此，业界也在探索新一代更为通用的实时数仓和数据湖架构。
 
-  目前数据湖分析系统已经上线运行，为企业用户提供了稳定可靠的一站式数据入湖服务，并且对接企业内部的大数据计算平台、数据查询平台
-  报表平台等多个下游业务系统，满足了企业数据开发需求，创造了巨大的价价值。
+我们对企业大数据发展现状进行了深入调研，并且充分了解了企业所面临的需求和疼点，同时结合前沿开源技术发展现状，设计
+并实现了基于Iceberg的数据湖分析系统（Data Lake Analytics，简称DLA)。
+我们首先对企业内部的多种数据源进行分析总结，然后
+根据Apache Iceberg支持多种数据源、多种计算引擎、多种存储介质以及其它优秀特性，
+设计并实现了数据源管理、元数据管理、数据入湖、
+数据探索四大模块。其中数据源是入湖任务的前提要求，通过注册相应数据源，用户可在创建
+入湖任务时选择对应的源表；元数据是描述Iceberg表的，Iceberg表即入湖任务中的
+目标表；数据入湖是DLA的核心流程功能，目的是用户通过该功能将源数据表流程化入湖
+和查看已申请入湖任务执行情况；数据探索模块基于Spark和Presto实现了数据的查询和分析使用功能。
+
+在元数据管理模块中，我们提供了Iceberg表的自动优化服务，包括合并小文件、清理过期快照数据、
+删除孤儿文件、生命周期管理等，这项服务使得用户不再需要自己写程序来进行运维，降低了用户的
+运维成本，用户可以一键启动该服务，并会根据表的若干指标及历史执行情况判断所需资源，并配有
+告警机制，及时通知专业运维处理。
+
+目前，数据湖分析系统已经上线运行，为企业用户提供了稳定可靠的一站式数据入湖服务，并且对接
+企业内部的大数据计算平台、数据查询平台和报表平台等多个下游业务系统，满足了企业数据开发需求
+，创造了巨大的价值。
 
 \end{abstract}
 
 \begin{abstract*}
-  This is a sample document of USTC thesis \LaTeX{} template for bachelor,
-  master and doctor. The template is created by zepinglee and seisman, which
-  orignate from the template created by ywg. The template meets the
-  equirements of USTC thesis writing standards.
 
-  This document will show the usage of basic commands provided by \LaTeX{} and
-  some features provided by the template. For more information, please refer to
-  the template document ustcthesis.pdf.
+In recent years, with the rapid development of big data, machine learning,
+5G, and other technologies, the scale of data has been continuously
+increasing, and the sources and types of data have become more diverse.
+At the same time, as the demand for data-driven business in enterprises
+continues to deepen and the maturity of massive data analysis technology,
+data warehouse has become a standard service for internal data insights in
+enterprises. However, the traditional Hadoop-based data warehouse has a
+significant delay in every link from data import to data analysis, greatly
+reducing the timeliness of data analysis. At the same time, for the expansion
+of data analysis scenarios, the traditional single data warehouse architecture
+cannot meet the changing data analysis needs. Therefore, the industry is also
+exploring a new generation of more universal Real-time Lakehouse and Data Lake architectures.
+
+We conducted in-depth research on the development status of enterprise big
+data and fully understood the needs and pain points faced by enterprises,
+and combining the development status of cutting-edge open-source technology,
+we designed and implemented a Data Lake Analytics System (DLA)
+based on Iceberg. We first analyzed and summarized various
+data sources within the enterprise, and then designed and implemented four
+modules of data source management, metadata management, data import, and data
+exploration based on the various data sources, multiple computing engines,
+multiple storage media, and other excellent features supported by Apache Iceberg.
+Among them, data source is a prerequisite for the import task. By registering
+the corresponding data source, users can select the corresponding source table
+when creating an import task. Metadata describes the Iceberg table, which is the
+target table in the import task. Data import is the core process function of DLA.
+The purpose is for users to streamline the import of source data tables and view
+the execution status of applied import tasks. The data exploration module implements
+data query and analysis functions based on Spark and Presto.
+
+In the metadata management module, we provide an auto optimize service
+for Iceberg tables, including merging small files, cleaning up expired snapshot,
+deleting orphan files, and lifecycle management. This service eliminates
+the need for users to write programs for operations and maintenance, reduces users'
+operation and maintenance costs, and allows users to start the service with one
+click. It will judge the required resources based on several indicators and
+historical execution results of the table and is equipped with an alarm mechanism
+to notify professional operations and maintenance for timely processing.
+
+Currently, the Data Lake Analysis System has been launched and operated,
+providing stable and reliable one-stop data import services for enterprise
+users. It also connects with multiple downstream business systems such as
+the enterprise's big data computing platform, data query platform, and report
+platform to meet enterprise data development needs and create significant value.
+
 \end{abstract*}
