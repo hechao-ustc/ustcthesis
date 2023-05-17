@@ -28,12 +28,12 @@
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{数据源类图.png}
+  \includegraphics[width=1.0\textwidth]{数据源类图.png}
   \caption{数据源管理类图}
   \label{fig:数据源类图}
 \end{figure}
 
-DatasourceV2Controller是数据源管理的核心类，是用户访问数据源管理的入口，
+其中，DatasourceV2Controller是数据源管理的核心类，是用户访问数据源管理的入口，
 主要负责接受各种数据源的创建、查看、更新、删除以及连接测试的请求，对应的逻辑处理是在
 成员变量DsV2BizService中实现的。
 
@@ -96,7 +96,7 @@ OptimizerService是自动优化的逻辑处理，会在后面进行详细介绍�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{任务创建活动图.png}
+  \includegraphics[width=0.87\textwidth]{任务创建活动图.png}
   \caption{入湖任务创建活动图}
   \label{fig:任务创建活动图}
 \end{figure}
@@ -172,7 +172,7 @@ SuperSQL做到计算对用户透明，
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.65\textwidth]{snapshot事件信息.png}
+  \includegraphics[width=0.67\textwidth]{snapshot事件信息.png}
   \caption{snapshot事件信息}
   \label{fig:snapshot事件信息}
 \end{figure}
@@ -222,6 +222,13 @@ MSE通过公式\ref{eq:example1}进行计算：
 
 （4）返回数据到RewriteDataFilesActionResult中；
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{Iceberg Commit事件结构.png}
+  \caption{Iceberg Commit事件结构}
+  \label{fig:Commit事件结构}
+\end{figure}
+
 通过公式\ref{eq:example1}～\ref{eq:example3}计算得到各个分区的MSE值之后，通过事件汇报的方式发送到文件合并服务。
 后台服务在收到这些MSE值之后，
 自动根据不同的表所配置的不同的值来决策是否需要对某个分区或者是某张表进行合并。 Commit事件为一次snapshot生成的事件，
@@ -232,14 +239,7 @@ Summary中记录了每个分区的MSE值。与阈值T进行比较后，发现分
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.4\textwidth]{Iceberg Commit事件结构.png}
-  \caption{Iceberg Commit事件结构}
-  \label{fig:Commit事件结构}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.50\textwidth]{BaseRewriteDataFilesJob.png}
+  \includegraphics[width=0.8\textwidth]{BaseRewriteDataFilesJob.png}
   \caption{小文件合并相关类图}
   \label{fig:BaseRewriteDataFilesJob}
 \end{figure}
@@ -251,18 +251,20 @@ doExecute会调用Iceberg那边提供的重写文件接口进行实际的文件�
 
 经过这样的优化后。如图\ref{fig:不同时刻作业合并小文件数}，和之前的定时调度进行合并小文件相比，可以看到基于MSE的小文件合并在文件数量上得到了很好的平衡。
 如图\ref{fig:随着时间的执行小文件个数的变化}所示，合并优化的文件状态均在一个均衡的水平，
-小文件的增长得到了有效的控制，离线合并任务只在MSE达到某个阈值的时候才触发合并，避免了不必要的计算资源的开销。
+小文件的增长得到了有效的控制，在3841号快照之前，小文件数量一直上升，这是因为离线合并任务检查MSE的时间粒度为5分钟，
+在这之后时间粒度改为1分钟，又在快照8065之后改为30秒，这是因为在之前的合并任务检查MSE时，发现MSE远大于设定的阈值，
+于是降低MSE检查的时间粒度，以便更早地发现MSE值已达到阈值，从而触发合并任务。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{不同时刻作业合并小文件数.png}
+  \includegraphics[width=1.0\textwidth]{不同时刻作业合并小文件数.png}
   \caption{不同时刻作业合并小文件数}
   \label{fig:不同时刻作业合并小文件数}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{随着时间的执行小文件个数的变化.png}
+  \includegraphics[width=1.0\textwidth]{随着时间的执行小文件个数的变化.png}
   \caption{随着时间的执行小文件个数的变化}
   \label{fig:随着时间的执行小文件个数的变化}
 \end{figure}
@@ -285,7 +287,7 @@ doExecute会调用Iceberg那边提供的文件清除接口进行实际的文件�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{ExpireSnapshotsJob.png}
+  \includegraphics[width=0.82\textwidth]{ExpireSnapshotsJob.png}
   \caption{历史快照清理相关类图}
   \label{fig:ExpireSnapshotsJob}
 \end{figure}
@@ -295,7 +297,7 @@ doExecute会调用Iceberg那边提供的文件清除接口进行实际的文件�
 清理孤⼉⽂件过程分为三步：
 
 （1）筛选出合规的数据⽂件（数据及元数据）validFileDF，通过⽂件fs client（hdfs/cos）
-筛出过期的⾮隐藏⽂件（以"下划线"和"."开头的⽂件）actualFileDF；
+筛出过期的⾮隐藏⽂件（以下划线和点开头的⽂件）actualFileDF；
 
 （2）将actualFileDF与validFileDF和他们相交的公共部分joinCond做left anti join，最终的⽂件即orphanFiles，并将此⽂件序列删除；
 
@@ -307,7 +309,7 @@ doExecute会调用Iceberg那边提供的删除孤儿文件接口进行实际的�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{RemoveOrphanFilesJob.png}
+  \includegraphics[width=0.75\textwidth]{RemoveOrphanFilesJob.png}
   \caption{孤儿文件删除相关类图}
   \label{fig:孤儿文件删除相关类图}
 \end{figure}
@@ -329,7 +331,7 @@ doExecute会调用Iceberg那边提供的删除孤儿文件接口进行实际的�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{dataTTLJob.png}
+  \includegraphics[width=0.7\textwidth]{dataTTLJob.png}
   \caption{生命周期管理相关类图}
   \label{fig:dataTTLJob}
 \end{figure}

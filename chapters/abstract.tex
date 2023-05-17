@@ -13,12 +13,13 @@
 同时，对于数据分析场景的拓展，传统单一的数仓架构也无法满足多变的数据分析需求。
 为此，业界也在探索新一代更为通用的实时数仓和数据湖架构。
 
-经过对企业大数据发展现状的深入调研，充分了解企业所面临的需求和疼点，同时结合前沿开源技术发展现状，设计
+经过对企业大数据发展现状的深入调研，充分了解企业所面临的需求和痛点，同时结合前沿开源技术发展现状，设计
 并实现了基于Iceberg的数据湖分析系统（Data Lake Analytics，简称DLA)。
 DLA提供了数据源管理、元数据管理、数据入湖、数据探索四大功能。
-其中数据源是入湖任务的前提要求，通过注册相应数据源，用户可在创建
-入湖任务时选择对应的源表；元数据是描述Iceberg表的，Iceberg表即入湖任务中的
-目标表；数据入湖是DLA的核心流程功能，目的是用户通过该功能将源数据表流程化入湖
+其中数据源管理是DLA的一个重要功能，它可以对不同类型的数据源进行有效的管理和维护，
+而数据源是入湖任务的前提要求，通过注册相应数据源，用户可在创建入湖任务时选择对应的源表；
+元数据管理主要对Iceberg表元数据进行管理和维护，而元数据是描述Iceberg表的，Iceberg表即入湖任务中的目标表；
+数据入湖是DLA的核心流程功能，目的是用户通过该功能将源数据表流程化入湖
 和查看已申请入湖任务执行情况；数据探索是基于Spark和Presto实现了数据的查询和分析使用功能。
 在元数据管理中，DLA还提供了Iceberg表的自动优化服务，包括合并小文件、清理过期快照数据、
 删除孤儿文件、生命周期管理，这项服务使得用户不再需要自己写程序来进行运维，降低了用户的
@@ -39,56 +40,57 @@ DLA提供了数据源管理、元数据管理、数据入湖、数据探索四�
 
 \begin{abstract*}
 
-In recent years, with the rapid development of big data, machine learning,
-5G, and other technologies, the scale of data has been continuously
-increasing, and the sources and types of data have become more diverse.
-At the same time, as the demand for data-driven business in enterprises
-continues to deepen and the maturity of massive data analysis technology,
-data warehouse has become a standard service for internal data insights in
-enterprises. However, the traditional Hadoop-based data warehouse has a
-significant delay in every link from data import to data analysis, greatly
-reducing the timeliness of data analysis. At the same time, for the expansion
-of data analysis scenarios, the traditional single data warehouse architecture
-cannot meet the changing data analysis needs. Therefore, the industry is also
-exploring a new generation of more universal Real-time Lakehouse and Data Lake architectures.
+In recent years, with the rapid development of technologies such as big data,
+machine learning, and 5G, the scale of data has continued to increase, and the
+sources and types of data have become more diversified. At the same time, as
+enterprises continue to deepen their data-driven business needs, and with the
+maturity of massive data analysis technology, data warehouses have become a
+standard service for enterprise internal data insights. However, the traditional
+data warehouse based on Hadoop technology has a large delay in every link from data
+import to data analysis, which greatly reduces the timeliness of data analysis.
+At the same time, for the expansion of data analysis scenarios, the traditional
+single data warehouse architecture cannot meet the ever-changing data analysis
+needs. To this end, the industry is also exploring a new generation of more general
+real-time data warehouse and data lake architecture.
 
-After in-depth research on the development status of enterprise big data,
-fully understand the needs and pain points faced by enterprises, and combine
-the development status of cutting-edge open source technology, design and
-implement the Data Lake Analytics System (DLA)
-based on Iceberg. DLA provides four functions: data source management,
-metadata management, data into the lake, and data exploration. Among them,
-the data source is the premise requirement of the lake entry task,
-by registering the corresponding data source, the user can select the
-corresponding source table when creating the lake entry task; The metadata
-describes the Iceberg table, and the Iceberg table is the target table in the
-lake entry task; Data entry into the lake is the core process function of DLA,
-the purpose is for users to process the source data table into the lake and view
-the execution status of the tasks that have been applied for into the lake through
-this function; Data exploration is based on Spark and Presto to realize the function
-of data query and analysis. In metadata management, DLA also provides automatic
-optimization services for Iceberg tables, including merging small files, clearing
-expired snapshot data, deleting orphan files, life cycle management. This
-service eliminates the need for users to write their own programs for operation
-and maintenance, which reduces the user's operation and maintenance cost, the
-user can start the service with one click, and will judge the required resources
-according to several indicators in the table and historical execution status,
-and is equipped with an alarm mechanism to notify professional operation and maintenance processing in time.
+After in-depth research on the development status of enterprise big data, we fully
+understand the needs and pain points faced by enterprises, and combined with the
+development status of cutting-edge open source technology, we designed and implemented
+a data lake analysis system (Data Lake Analytics, referred to as DLA) based on Iceberg.
+DLA provides four functions: data source management, metadata management, data into the
+lake, and data exploration. Among them, data source management is an important function
+of DLA. It can effectively manage and maintain different types of data sources, and the
+data source is the prerequisite for the task of entering the lake. By registering the
+corresponding data source, the user can create the task of entering the lake. Select
+the corresponding source table; metadata management mainly manages and maintains the
+metadata of the Iceberg table, and the metadata describes the Iceberg table, and the
+Iceberg table is the target table in the task of entering the lake; data entering the
+lake is the core process function of DLA , the purpose is for users to process the
+source data tables into the lake and view the execution status of the tasks that have
+been applied for entering the lake through this function; data exploration is based on
+Spark and Presto to realize the function of data query and analysis. In metadata management,
+DLA also provides automatic optimization services for Iceberg tables, including merging
+small files, clearing expired snapshot data, deleting orphan files, and lifecycle management.
+This service eliminates the need for users to write their own programs for operation and
+maintenance , which reduces the user's operation and maintenance costs, the service can be
+started with one click, and the required resources will be judged according to several
+indicators in the table and historical execution conditions, and an alarm mechanism is
+equipped to notify professional operation and maintenance processing in time.
 
-With DLA, the timeliness of data import can be improved from the traditional
-data warehouse's T+1 to now T+0, providing near-real-time data access from
-seconds to minutes. With the help of Presto, data queries have achieved second-level
-analysis capabilities, allowing real-time interactive queries on massive data,
-thereby improving overall business conversion efficiency. Moreover, DLA also provides
-batch-stream fusion at the storage level, eliminating the need to equip different
-storage services for stream computing and batch computing when building data analysis
-architectures, a unified distributed storage system can be used to store data instead.
-Currently, DLA has been launched and provides stable and reliable one-stop data ingestion
-services for enterprise users, reducing the data import time from the original daily level
-to the current minute level and data query latency from the original minute level to the
-current second level query, shortening the overall end-to-end data display time to the
-minute level. Furthermore, DLA has also connected with multiple downstream business systems,
-such as enterprise big data computing platforms, data query platforms, and reporting platforms,
-to meet enterprise data development needs and create significant value.
+With DLA, the timeliness of data import can be improved from the T+1 of the traditional
+data warehouse to the current T+0, providing quasi-real-time data access at the second to
+minute level; with the help of Presto, the data query is realized in seconds Level analysis
+capability, which can perform real-time interactive query on massive data, improving the
+efficiency of overall business transformation; and DLA also provides batch flow integration
+at the storage level, so that it is no longer necessary to build a data analysis architecture
+for stream computing and Batch computing is equipped with different storage services, and a
+unified distributed storage system can be used to store data. At present, DLA has been put
+into operation, providing enterprise users with a stable and reliable one-stop data-into-the-lake
+service, and changing the data import delay of multiple businesses from the original day-level
+to the current minute-level, and the data query delay is also reduced. From the original minute
+level to the current second level query, the overall end-to-end data display time is shortened
+to the minute level. Moreover, DLA is also connected to multiple downstream business systems
+such as the big data computing platform, data query platform, and reporting platform within the
+enterprise, which meets the data development needs of the enterprise and creates huge value.
 
 \end{abstract*}

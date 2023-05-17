@@ -58,13 +58,30 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
 \section{系统功能模块设计}
 
 根据上一章对数据湖分析系统的需求分析，将系统划分了五个功能：数据源管理、元数据管理、数据入湖、数据探索、自动优化，
-本节将对这五个功能模块进行概要设计。
+本节将对这五个功能模块进行概要设计，
+其总体的功能结构图如图\ref{fig:总体功能结构图}所示，
+可以看到，数据自动优化服务是在元数据管理中实现的，包括小文件合并、历史快照清理、孤儿文件删除、数据生命周期管理等功能，会在后面进行详细的需求分析；
+在数据源管理中，包括mysql数据源管理、tube数据源管理、kafka数据源管理、pulsar数据源管理的功能；
+在元数据管理中，除了数据优化服务，还有表的增删改查、关联别处已创建的表、库的注册与查看等功能；
+在数据入湖中，包括实时数据入湖、存量数据入湖、关系型数据入湖任务创建的功能；
+在数据探索中，主要包括spark查询、presto查询、api方式查询、zeppelin查询的功能，其中，前三种查询方式会在内部的统一查询平台提供，
+而zeppelin会内嵌在数据湖分析平台中供用户使用。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{总体功能结构图.png}
+  \caption{总体功能结构图}
+  \label{fig:总体功能结构图}
+\end{figure}
 
 \subsection{数据源管理}
 
-数据源是入湖任务必须设置的，是Iceberg入湖的源头，该模块支持数据源创建、查看、编辑、删除功能。
+数据源是创建入湖任务时必须设置的，是数据入湖的源头，该模块支持数据源创建、查看、编辑、删除功能，
+支持的数据源有关系型数据库MySql和消息队列Tube、Kafka、Pulsar。
+数据源管理是数据湖中不可或缺的一个重要功能，它为用户提供了有效的数据源管理和维护手段，以便更好地实现数据湖的建设和应用。
+
+创建数据源的时序图如图\ref{fig:数据源创建时序图}所示，
 在系统上创建数据源，需要填好所需要的信息，然后会做一个连接测试，最后才会将该数据源持久化到mysql中。
-创建数据源的时序图如图\ref{fig:数据源创建时序图}所示：
 
 \begin{figure}[H]
   \centering
@@ -73,8 +90,8 @@ Iceberg具有事务语义、快照读写分离、数据修复、时间旅行等�
   \label{fig:数据源创建时序图}
 \end{figure}
 
-从数据源分类上来看，数据湖分析系统支持关系型数据库源
-（mysql）以及消息队列数据源（tube、kafka、pulsar），各数据源需要的信息字段如下：
+从数据源分类上来看，数据湖分析系统支持的有关系型数据库源
+（mysql）以及消息队列数据源（tube、kafka、pulsar），创建各数据源时所需要的信息字段如下：
 
 （1）创建mysql数据源需要的信息字段如表\ref{tab:mysql数据源需要的信息字段}所示：
 
@@ -195,7 +212,7 @@ Oceanus上创建对应的jar任务，底层使用的引擎是flink；若为存�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{入湖任务创建时序图.png}
+  \includegraphics[width=0.95\textwidth]{入湖任务创建时序图.png}
   \caption{入湖任务创建时序图}
   \label{fig:入湖任务创建时序图}
 \end{figure}
@@ -206,26 +223,35 @@ Oceanus上创建对应的jar任务，底层使用的引擎是flink；若为存�
 目前主要依赖内部统一查询平台实现数据探索功能，在该平台上，用户可以编写sql
 设置执行引擎，presto或者spark。其中presto查询速度快，但是功能少，
 只支持查询功能；spark虽然查询速度慢，但支持的语句功能比较多，支持创建表、
-删除表、更新表、数据写入、数据删除、更新分区、表维护等语句。在查询平台上的数据探索时序图如图\ref{fig:数据探索时序图}所示。
+删除表、更新表、数据写入、数据删除、更新分区、表维护等语句，
+在查询平台上的数据探索时序图如图\ref{fig:数据探索时序图}所示。
+除了统一查询平台可以进行数据探索外，DLA还提供了Zeppelin进行数据探索，Zeppelin是一个基于Web的notebook，
+可以进行数据探索和可视化，它可以接入多种数据处理引擎，如spark、hive等，并支持多种语言，
+如Scala、Python、SparkSQL、Hive、Markdown、Shell等，开发者还可以实现更多的解释器来添加数据引擎。
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{数据探索时序图.png}
+  \includegraphics[width=0.65\textwidth]{数据探索时序图.png}
   \caption{数据探索时序图}
   \label{fig:数据探索时序图}
 \end{figure}
 
-除了统一查询平台可以进行数据探索外，DLA还提供了Zeppelin进行数据探索，Zeppelin是一个基于Web的notebook，
-可以进行数据探索和可视化。它可以接入多种数据处理引擎，如spark、hive等，并支持多种语言，
-如Scala、Python、SparkSQL、Hive、Markdown、Shell等。开发者还可以实现更多的解释器来添加数据引擎。
-
 \subsection{自动优化服务}
 
 Iceberg是基于快照的表格式，当两次commit间隔的数据量较小的情况下就会产生小文件，
-这种案例在iceberg被做为flink sink（流式场景）时尤为常见。用户为了下游引擎能高效的查询iceberg，
-经常会构建一些辅助的数据优化任务去优化iceberg表，例如、小文件合并、快照历史清理、孤儿文件删除。
-为了让用户能更方便的使用iceberg表，优化总体基于iceberg表数据湖的成本和性能，
-这里提出数据智能运维的概念，通过平台提供的统一服务对iceberg表进行优化从而降低整体数据湖的成本和性能的优化。
+这种案例在流式场景时尤为常见。用户为了下游引擎能高效的查询iceberg，
+经常会构建一些辅助的数据优化任务去优化iceberg表，例如小文件合并、历史快照清理、孤儿文件删除等。
+为了让用户能更方便的使用iceberg表，优化总体基于数据湖的成本和性能，
+提出了数据智能运维的概念，通过平台提供的统一服务对iceberg表进行优化从而降低整体数据湖的成本和性能。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.49\textwidth]{数据优化服务功能结构图.png}
+  \caption{数据优化服务功能结构图}
+  \label{fig:数据优化服务功能结构图}
+\end{figure}
+
+自动优化服务功能结构图如图\ref{fig:数据优化服务功能结构图}所示，包括小文件合并、历史快照清理、孤儿文件删除、数据生命周期管理四大功能。
 
 \begin{figure}[H]
   \centering
@@ -273,7 +299,7 @@ Iceberg是基于快照的表格式，当两次commit间隔的数据量较小的�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{小文件合并触发示意图.png}
+  \includegraphics[width=0.90\textwidth]{小文件合并触发示意图.png}
   \caption{小文件合并触发示意图}
   \label{fig:小文件合并触发示意图}
 \end{figure}
@@ -314,15 +340,15 @@ Iceberg表每一次write都会产生一个新的snapshot，同时也会产生一
 通过生命周期管理，用户可以方便地控制不再需要的数据的自动删除，从而释放存储空间和资源。
 但这样的⽣命周期管理有一些限制：
 
-（1）⽬前仅⽀持long（10/13位）、date、timestamp等类型时间字段；
+（1）⽬前仅⽀持Long（10/13位）、Date、DateTime、Timestamp等类型时间字段；
 
 （2）expireTime根据dataFile中的upperbounds值进⾏筛选，如果upperBound值为null将⽆效。
 
 \section{系统数据库设计}
 
-在信息存储方面，数据湖分析系统主要使用mysql进行信息存储，主要包括任务信息、任务详情信息、
-目标库信息、目标表信息、数据源信息、任务jar包信息，其中目标库和目标表在mysql
-中的信息只是一个映射，具体实际的表还是Iceberg表，其元数据存放在hive metastore中，
+在信息存储方面，数据湖分析系统主要使用关系型数据库mysql进行信息存储，主要的信息包括任务信息、任务详情信息、
+目标库信息、目标表信息、数据源信息、任务jar包信息等，其中目标库和目标表在mysql
+中的信息只是一个映射，这是为了方便在数据湖分析系统中展示而设置的，具体实际的表还是Iceberg表，其元数据存放在hive metastore中，
 数据文件存储在HDFS集群上。数据库ER图如图\ref{fig:数据库ER图}所示，任务表和
 目标表、数据源表、任务详情表、任务jar包信息表都是1对1的关系，而目标库和目标表的关系是1对多的关系，
 表示一个数据库中可以有多张iceberg表。

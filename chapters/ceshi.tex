@@ -16,7 +16,8 @@
 \subsection{数据源管理}
 
 在数据源页面，可以看到所有已创建的数据源，然后还可以对数据源进行创建、查看、编辑、删除功能，
-支持的数据源有关系型数据库Mysql，消息队列数据源Tube、Kafka、Pulsar等数据源。
+支持的数据源有关系型数据库Mysql，消息队列数据源Tube、Kafka、Pulsar等数据源，
+所有的数据源都会进行测试连接，即页面上的状态显示已连接才能正常使用。
 数据源的相关页面如图\ref{fig:创建数据源页面}所示。
 
 \begin{figure}[H]
@@ -124,7 +125,8 @@
     接口描述         & 创建Iceberg表         \\
     \midrule
     测试类型         & 功能测试         \\
-    前置条件         & 后端服务器、MySQL服务器、Hive Metastore服务正常         \\
+    前置条件         & 后端服务器、MySQL服务器、      \\
+                   &  Hive Metastore服务正常         \\
     接口地址       & /formation/v1/metadata/createTable        \\
     请求方式         & POST      \\
     请求数据类型         & application/json     \\
@@ -146,7 +148,8 @@
     接口描述         & 关联已有表         \\
     \midrule
     测试类型         & 功能测试         \\
-    前置条件         & 后端服务器、MySQL服务器、Hive Metastore服务正常         \\
+    前置条件         & 后端服务器、MySQL服务器、        \\
+                    &  Hive Metastore服务正常         \\
     接口地址       & /formation/v1/metadata/associateTable        \\
     请求方式         & POST      \\
     请求数据类型         & application/json     \\
@@ -225,10 +228,11 @@
 
 \subsection{数据入湖}
 
-数据入湖是管理入湖任务的，任务分为三种：实时数据入湖、存量数据入湖和关系型数据入湖，
-三种任务都需要填写基础信息、源表、目标表、参数及资源。在数据入湖页面，可以查看已创建的任务，
-也可以创建新的入湖任务或者进行编辑和删除；点击详情可以跳转到不同的平台查看任务的运行状态，存量入湖任务会到US统一调度平台查看任务，
-实时入湖任务会到Oceanus实时处理平台查看任务。入湖任务列表如图\ref{fig:数据入湖}所示。
+数据入湖是管理数据入湖任务的，任务分为三种：实时数据入湖、存量数据入湖和关系型数据入湖，
+三种任务都需要填写基础信息、源表、目标表、参数及申请资源。在数据入湖页面，可以查看已创建的任务，
+也可以创建新的入湖任务或者对已有的任务进行编辑和删除；点击详情可以跳转到不同的平台查看任务的运行状态，
+存量入湖任务和关系型数据入湖任务会到US统一调度平台查看任务，
+实时入湖任务会到Oceanus实时处理平台查看任务。入湖任务列表页面如图\ref{fig:数据入湖}所示。
 
 \begin{figure}[H]
   \centering
@@ -307,9 +311,10 @@
 
 \subsection{数据探索}
 
-在数据探索方面，Iceberg元数据存储在Hive Metastore中，因此可以通过统一查询平台进行数据查询和分析。
-统一查询平台支持使用Presto和Spark进行数据探索，同时还提供了API接口，方便将数据输出到下游
-的BI系统。除了统一查询平台，DLA还提供了Zeppelin来进行数据探索。Zeppelin的使用页面如图\ref{fig:Zeppelin使用}所示，
+在数据探索方面，由于Iceberg元数据存储在Hive Metastore中，因此可以通过统一查询平台进行数据查询和分析。
+统一查询平台支持使用Presto、Spark、Jupyter等进行数据探索，同时还提供了Restful API接口，方便将数据输出到下游的BI系统。
+
+除了统一查询平台，DLA还提供了Zeppelin来进行数据探索。Zeppelin的使用页面如图\ref{fig:Zeppelin使用}所示，
 Zeppelin提供了用户友好的交互式界面
 和支持多种编程语言的Notebook功能，用户可以通过编写SQL语句来进行数据查询和分析，并且可以将结果以多种
 格式进行展示和分享。相关的测试可以直接在查询平台和Zeppelin上输入SQL语句进行测试。
@@ -346,7 +351,7 @@ Zeppelin提供了用户友好的交互式界面
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{zeppelin查询测试.png}
+  \includegraphics[width=0.97\textwidth]{zeppelin查询测试.png}
   \caption{Zeppelin查询测试}
   \label{fig:badge1}
 \end{figure}
@@ -412,7 +417,8 @@ Zeppelin提供了用户友好的交互式界面
     用户场景         & 2min一个checkpoint，一次checkpoint产生50个   \\
                    & 2MB的小文件，则一天会产生60 / 2 * 24 * 3=2000   \\
                    & 个元数据文件和60 / 2 * 24 * 50=36,000个2MB的     \\
-                   & 小文件，按小时分区，数据保存30天，总大小2.16TB              \\
+                   & 小文件，按小时分区，数据保存30天，总大小    \\
+                   & 2.16TB              \\
     不执行优化服务         & 元数据文件：2000 * 30 = 60000         \\
                         & 数据文件：36000 * 30=1080000个2MB的小文件         \\
     执行优化服务       & 元数据文件：约4700个（保留2天的快照文件 \\
@@ -435,7 +441,8 @@ JMeter具有简单易用的界面，用户可以通过图形化界面或脚本�
 \subsection{性能测试}
 
 本小节主要对数据湖分析系统的性能进行测试，以元数据管理为例，使用JMeter对系统的主要接口进行压力测试\cite{33}，
-测试用例如表\ref{tab:exampletable16}所示，测试结果如图\ref{fig:badge2}所示：
+测试用例如表\ref{tab:exampletable16}所示，测试结果如图\ref{fig:badge2}所示，可以看到10000个请求平均响应时间在490ms左右，
+百分之95的在845ms内得到响应，符合要求。
 
 \begin{table}[H]
   \centering
@@ -480,8 +487,8 @@ JMeter具有简单易用的界面，用户可以通过图形化界面或脚本�
     \midrule
     测试类型         & 时延测试         \\
     数据源           & kafka，每秒8W条record，每天大小1KB     \\
-    任务资源         & flink集群提供20个CPU，每个CPU分配4G内存， \\
-                   &  共80G内存     \\
+    任务资源         & flink集群提供30个CPU，每个CPU分配4G内存， \\
+                   &  共120G内存     \\
     任务配置         & flink checkpoint时间设为1分钟，  \\
                     &  iceberg采用小时分区      \\
     预期结果         & 任务稳定运行，每个checkpoint都能按期完成  \\
