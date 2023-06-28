@@ -22,9 +22,8 @@ DLA提供了数据源管理、元数据管理、数据入湖、数据探索四�
 数据入湖是DLA的核心流程功能，目的是用户通过该功能将源数据表流程化入湖
 和查看已申请入湖任务执行情况；数据探索是基于Spark和Presto实现了数据的查询和分析使用功能。
 在元数据管理中，DLA还提供了Iceberg表的自动优化服务，包括合并小文件、清理过期快照数据、
-删除孤儿文件、生命周期管理，这项服务使得用户不再需要自己写程序来进行运维，降低了用户的
-运维成本，可以一键启动该服务，并会根据表的若干指标及历史执行情况判断所需资源，并配有
-告警机制，及时通知专业运维处理。
+删除孤儿文件、生命周期管理，这项服务使得用户无需关心Iceberg表后续的维护，
+可以自动化的去完成，并会根据表的若干指标及历史执行情况判断所需资源。
 
 有了DLA，数据导入的时效性可以由传统数仓的T+1提升到现在的T+0，提供秒级至分钟级的准实时数据接入；
 数据查询在Presto的帮助下，实现了秒级分析能力，能够在海量数据上进行实时的交互式查询，提升了整体业务转化的效率；
@@ -33,8 +32,7 @@ DLA提供了数据源管理、元数据管理、数据入湖、数据探索四�
 目前，DLA已经上线运行，为企业用户提供了稳定可靠的一站式数据入湖服务，
 并将多个业务由原来的天级别的数据导入时延变成现在的分钟级别，数据查询时延也由原来的分钟级别降到了现在的秒级查询，
 将整体端到端的数据展示时间缩短到了分钟级。
-而且，DLA还对接了企业内部的大数据计算平台、数据查询平台和报表平台等多个下游业务系统，满足了企业数据开发需求
-，创造了巨大的价值。
+而且，DLA还对接了企业内部的大数据计算平台、数据查询平台和报表平台等多个下游业务系统，满足了企业数据开发需求。
 
 \end{abstract}
 
@@ -71,11 +69,9 @@ been applied for entering the lake through this function; data exploration is ba
 Spark and Presto to realize the function of data query and analysis. In metadata management,
 DLA also provides automatic optimization services for Iceberg tables, including merging
 small files, clearing expired snapshot data, deleting orphan files, and lifecycle management.
-This service eliminates the need for users to write their own programs for operation and
-maintenance , which reduces the user's operation and maintenance costs, the service can be
-started with one click, and the required resources will be judged according to several
-indicators in the table and historical execution conditions, and an alarm mechanism is
-equipped to notify professional operation and maintenance processing in time.
+This service enables users not to care about the subsequent maintenance of the Iceberg table,
+it can be completed automatically, and the required resources will be judged based on several
+indicators of the table and historical execution conditions.
 
 With DLA, the timeliness of data import can be improved from the T+1 of the traditional
 data warehouse to the current T+0, providing quasi-real-time data access at the second to
@@ -91,6 +87,6 @@ to the current minute-level, and the data query delay is also reduced. From the 
 level to the current second level query, the overall end-to-end data display time is shortened
 to the minute level. Moreover, DLA is also connected to multiple downstream business systems
 such as the big data computing platform, data query platform, and reporting platform within the
-enterprise, which meets the data development needs of the enterprise and creates huge value.
+enterprise to meet the data development needs of the enterprise.
 
 \end{abstract*}
